@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">Here We Were</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="password">Password</string>
+    <string name="loginBtn">LOGIN</string>
+    <string name="author">Nguyen Nam Ha</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="register">Register</string>
+    <string name="company_name">FPT Greenwich</string>
+    <string name="slogan">Guess where we are</string>
+    <string name="email">Email Address</string>
+    <string name="resgisterBtn">RESGISTER</string>
+    <string name="company">FPT Greenwich</string>
+    <string name="name">Name</string>
+    <string name="resgister">RESGISTER</string>
+    <string name="retype_password">Retype Password</string>
+
+
 </resources>
