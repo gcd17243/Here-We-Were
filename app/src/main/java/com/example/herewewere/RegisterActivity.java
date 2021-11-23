@@ -31,6 +31,8 @@ public class RegisterActivity extends AppCompatActivity {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Get input from layout
+
                 String user = email.getText().toString().trim();
                 String pass = password.getText().toString().trim();
                 String repass = repassword.getText().toString().trim();
@@ -93,6 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 } }
         });
+        //Go to LoginActivity
         banner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

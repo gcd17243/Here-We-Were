@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,14 +37,32 @@ public class LoginActivity extends AppCompatActivity  {
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Get email and password from database
+                //Get input from layout
                 String user = email.getText().toString();
                 String pass = password.getText().toString();
-                //Check User
+                //Error msg for User information not fill
+                if(user.isEmpty()){
+                    email.setError("Email is required!");
+                    email.requestFocus();
+                    return;
+                }
+                if(!Patterns.EMAIL_ADDRESS.matcher(user).matches()){
+                    email.setError("Email is Invalid!");
+                    email.requestFocus();
+                    return;
+                }
+
+                if(pass.isEmpty()){
+                    password.setError("Password is required!");
+                    password.requestFocus();
+                    return;
+                }
+                //Check if field is empty
                 if(user.equals("")||pass.equals(""))
-                    //If user match
+
                     Toast.makeText(LoginActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
                 else{
+                    //If user match
                     Boolean checkuserpass = DB.checkemailpassword(user, pass);
                     if(checkuserpass==true){
                         Toast.makeText(LoginActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
@@ -55,6 +74,7 @@ public class LoginActivity extends AppCompatActivity  {
                 }
             }
         });
+        //Go to RegisterActivity
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,6 +82,7 @@ public class LoginActivity extends AppCompatActivity  {
                 startActivity(intent);
             }
         });
+        //Go to LoginActivity
         banner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
