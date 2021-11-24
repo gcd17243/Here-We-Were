@@ -1,4 +1,4 @@
-package com.example.herewewere;
+package com.example.herewewere.Login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.herewewere.MapsActivity;
+import com.example.herewewere.ProfileActivity;
+import com.example.herewewere.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;

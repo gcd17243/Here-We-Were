@@ -1,4 +1,4 @@
-package com.example.herewewere;
+package com.example.herewewere.Login;
 
 import android.content.ContentValues;
 import android.content.Context;
