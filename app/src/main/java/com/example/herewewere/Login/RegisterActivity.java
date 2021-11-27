@@ -11,8 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.herewewere.MapsActivity;
 import com.example.herewewere.R;
+import com.example.herewewere.activities.MainActivity;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText email, password, repassword;
@@ -84,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
                             //Check if data is insert
                             if(insert==true){
                                 Toast.makeText(RegisterActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
                             }else{
                                 Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();

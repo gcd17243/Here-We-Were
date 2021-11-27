@@ -16,7 +16,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +42,22 @@ import com.example.herewewere.R;
 import com.example.herewewere.databases.MyNoteDbManager;
 import com.example.herewewere.models.MyNote;
 import com.example.herewewere.preferences.MyPreferences;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -56,17 +74,17 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-public class CreateOrShowNoteActivity extends AppCompatActivity implements View.OnClickListener {
+public class CreateOrShowNoteActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
 
     private MyNoteDbManager myNoteDbManager;
     private MyPreferences myPreferences;
 
-    private EditText editTitle, editNote;
+    private EditText editTitle, editNote,latid,longid;
     private BottomSheetBehavior bottomSheetBehavior;
     private TextView editedDateText;
     private ImageView noteImage;
-    private LinearLayout linearLayoutET, bottomSheetLinearLayout, deleteNoteLL, makeACopyLL, sendNoteLL, takePhotoLL, chooseImageLL;
-    private ImageButton moreHorizButton;
+    private LinearLayout linearLayoutET, bottomSheetLinearLayout, deleteNoteLL, makeACopyLL, sendNoteLL, takePhotoLL, chooseImageLL,getlocation;
+    private GoogleMap mMap;
 
     private final static int REQUEST_CAMERA_CODE = 121;
     private final static int REQUEST_CHOOSE_IMAGE_CODE = 122;
@@ -74,6 +92,10 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
     private boolean isUndoClicked, isImageChanged;
     private String showNoteKey, title, note, imagePath = null;
     private int id;
+    FusedLocationProviderClient client;
+
+
+    private final static int PLACE_PICKER_REQUEST = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,16 +111,19 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
 
         editTitle = findViewById(R.id.editTitle);
         editNote = findViewById(R.id.editNote);
+        latid = findViewById(R.id.latid);
+        longid = findViewById(R.id.longid);
         editedDateText = findViewById(R.id.editedDate);
         noteImage = findViewById(R.id.noteImage);
-        //moreHorizButton = findViewById(R.id.moreHoriz);
         linearLayoutET = findViewById(R.id.linearLayoutEt);
+
 
         deleteNoteLL = findViewById(R.id.deleteNoteLL);
         makeACopyLL = findViewById(R.id.makeACopyLL);
         sendNoteLL = findViewById(R.id.sendNoteLL);
         takePhotoLL = findViewById(R.id.takePhotoLL);
         chooseImageLL = findViewById(R.id.chooseImageLL);
+        getlocation = findViewById(R.id.getlocation);
 
         myNoteDbManager = new MyNoteDbManager(this);
         myPreferences = MyPreferences.getMyPreferences(this);
@@ -109,6 +134,11 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
         sendNoteLL.setOnClickListener(this);
         takePhotoLL.setOnClickListener(this);
         chooseImageLL.setOnClickListener(this);
+        getlocation.setOnClickListener(this);
+
+        client = LocationServices.getFusedLocationProviderClient(this);
+
+
 
         createOrDisplaySavedData();
 
@@ -438,8 +468,24 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
                 takePhotoPermission();
                 closePlusBottomSheetAndKeyboard();
                 break;
+
+            case R.id.getlocation:
+                getCurrentLocation();
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    startActivityForResult(builder.build(CreateOrShowNoteActivity.this),PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+                break;
+
         }
     }
+
+
+
 
     private void shareNoteToOtherClientApp() {
         if (myPreferences.getDisableShareNote().equals("disable")) {
@@ -534,7 +580,6 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CHOOSE_IMAGE_CODE && data != null) {
                 Uri uri = data.getData();
@@ -547,36 +592,37 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
                         isImageChanged = true;
                         imagePath = saveToInternalStorage(bitmap);
 
-                        noteImage.setVisibility(View.VISIBLE);
-                        Glide.with(CreateOrShowNoteActivity.this)
-                                .asBitmap()
-                                .load(bitmap)
-                                .into(noteImage);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                        Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+                            noteImage.setVisibility(View.VISIBLE);
+                            Glide.with(CreateOrShowNoteActivity.this)
+                                    .asBitmap()
+                                    .load(bitmap)
+                                    .into(noteImage);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
 
-            } else if (requestCode == REQUEST_CAMERA_CODE && data != null) {
-                Bundle bundleData = data.getExtras();
+                } else if (requestCode == REQUEST_CAMERA_CODE && data != null) {
+                    Bundle bundleData = data.getExtras();
 
-                if (bundleData != null) {
-                    Bitmap bitmapData = (Bitmap) bundleData.get("data");
+                    if (bundleData != null) {
+                        Bitmap bitmapData = (Bitmap) bundleData.get("data");
 
-                    if (bitmapData != null) {
-                        isImageChanged = true;
-                        imagePath = saveToInternalStorage(bitmapData);
+                        if (bitmapData != null) {
+                            isImageChanged = true;
+                            imagePath = saveToInternalStorage(bitmapData);
 
-                        noteImage.setVisibility(View.VISIBLE);
-                        Glide.with(this)
-                                .asBitmap()
-                                .load(bitmapData)
-                                .into(noteImage);
+                            noteImage.setVisibility(View.VISIBLE);
+                            Glide.with(this)
+                                    .asBitmap()
+                                    .load(bitmapData)
+                                    .into(noteImage);
+                        }
                     }
                 }
             }
-        }
+
         closePlusBottomSheetAndKeyboard();
     }
 
@@ -636,5 +682,53 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
         }
     }
 
+    private void getCurrentLocation() {
+        //Initialize task Location
+        Task<Location> task = client.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            //When success
+            public void onSuccess(final Location location) {
+                if (location !=null){
+                    // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+                    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                            .findFragmentById(R.id.mapadd);
 
+                    mapFragment.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(@NonNull GoogleMap googleMap) {
+                            //Initialize lat Lng
+                            LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+                            //Create Maker Options
+                            String latitude = String.valueOf(location.getLatitude());
+                            String longitude = String.valueOf(location.getLongitude());
+                            latid.setText(latitude);
+                            longid.setText(longitude);
+                            //Zoom Map
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                        }
+                    });
+
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+
+        mMap = googleMap;
+        // Add a marker in Sydney and move the camera
+        if (imagePath==null){
+            LatLng sydney = new LatLng(latid.getId(), longid.getId());
+            mMap.addMarker(new MarkerOptions().position(sydney).title(title));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        }else{
+            LatLng sydney = new LatLng(latid.getId(), longid.getId());
+            mMap.addMarker(new MarkerOptions().position(sydney).title(title).icon(BitmapDescriptorFactory.fromPath(imagePath)));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        }
+
+    }
 }

@@ -5,13 +5,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.SearchView;
 
+import com.example.herewewere.activities.CreateOrShowNoteActivity;
+import com.example.herewewere.activities.MainActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.herewewere.databinding.ActivityMapsBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,11 +38,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     SupportMapFragment mapFragment;
     SearchView searchView;
     FusedLocationProviderClient client;
+    FloatingActionButton floatingActionButton,floatingActionButton2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        floatingActionButton = findViewById(R.id.floatingActionButton3);
+        floatingActionButton2 = findViewById(R.id.floatingActionButton4);
 
         //Assign Variable
         searchView = findViewById(R.id.sv_location);
@@ -133,4 +142,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Map = googleMap;
     }
 
+    public void gotToMapActivity(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    public void gotToCreateNewNoteActivity(View view) {
+
+        Intent intent = new Intent(this, CreateOrShowNoteActivity.class);
+        intent.putExtra("our_note_key", "create_note_here");
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
 }

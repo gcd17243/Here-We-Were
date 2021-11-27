@@ -21,13 +21,22 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.example.herewewere.Login.LoginActivity;
+import com.example.herewewere.MapsActivity;
+import com.example.herewewere.ProfileActivity;
 import com.example.herewewere.R;
 import com.example.herewewere.adapters.RecyclerViewAdapter;
 import com.example.herewewere.databases.MyNoteDbManager;
 import com.example.herewewere.models.MyNote;
 import com.example.herewewere.preferences.MyPreferences;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -47,20 +56,27 @@ public class MainActivity extends AppCompatActivity {
     private boolean isUndoClicked;
 
     private TextView noDataTextView;
-    private Button bgButtonCng11, bgButtonCng12, bgButtonCng13, bgButtonCng21, bgButtonCng22, bgButtonCng23;
     private MenuItem listMenuItem, gridMenuItem, listOrGridViewIcon;
-    private CoordinatorLayout coordinatorLayout;
-    private FloatingActionButton floatingActionButton;
+    private FloatingActionButton floatingActionButton,floatingActionButton2;
+    GoogleSignInClient mGoogleSignInClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+
         setTitle("Notes");
         recyclerView = findViewById(R.id.recyclerView);
         noDataTextView = findViewById(R.id.noDataText);
         floatingActionButton = findViewById(R.id.floatingActionButton);
+        floatingActionButton2 = findViewById(R.id.floatingActionButton2);
 
 
         myPreferences = MyPreferences.getMyPreferences(this);
@@ -69,9 +85,6 @@ public class MainActivity extends AppCompatActivity {
         fontSize = myPreferences.getFontSize();  //by default medium = 1
         backgroundColor = myPreferences.getBackgroundColor();
 
-        if (backgroundColor != -1) {
-            coordinatorLayout.setBackgroundColor(backgroundColor);
-        }
 
         displayAllNotes();
         floatingActionButtonHideOrShow();
@@ -197,15 +210,27 @@ public class MainActivity extends AppCompatActivity {
             case R.id.fontChangeIcon:
                 fontChange();
                 break;
-
-
-
-
-
+            case R.id.ProfileIcon:
+                startActivity(new Intent(this, ProfileActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                break;
+            case R.id.LogoutIcon:
+                signOut();
+                break;
 
         }
         return true;
     }
+
+    private void signOut() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(MainActivity.this, "User Signed Out Successfully", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
+                    } });  }
 
     public void gotToCreateNewNoteActivity(View view) {
         Intent intent = new Intent(this, CreateOrShowNoteActivity.class);
@@ -279,160 +304,7 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-    private void backgroundColorChange() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select a color");
-        builder.setIcon(R.drawable.bg_change_icon);
 
-        View view = getLayoutInflater().inflate(R.layout.background_change_layout, null);
-        bgButtonCng11 = view.findViewById(R.id.bgButtonCng11);
-        bgButtonCng12 = view.findViewById(R.id.bgButtonCng12);
-        bgButtonCng13 = view.findViewById(R.id.bgButtonCng13);
-        bgButtonCng21 = view.findViewById(R.id.bgButtonCng21);
-        bgButtonCng22 = view.findViewById(R.id.bgButtonCng22);
-        bgButtonCng23 = view.findViewById(R.id.bgButtonCng23);
-
-        builder.setView(view);
-        builder.setCancelable(true);
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-        bgButtonCng11.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                backgroundColor = getBackgroundColor(v);
-                coordinatorLayout.setBackgroundColor(backgroundColor);
-
-                myPreferences.setBackgroundColor(backgroundColor);
-                myPreferences.setCurrentlySelectedColorBtn("bgButtonCng11");
-                alertDialog.dismiss();
-
-                activityRecreated();
-            }
-        });
-
-        bgButtonCng12.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ColorDrawable buttonColor = (ColorDrawable) bgButtonCng12.getBackground();
-                backgroundColor = buttonColor.getColor();
-                coordinatorLayout.setBackgroundColor(backgroundColor);
-
-                myPreferences.setBackgroundColor(backgroundColor);
-                myPreferences.setCurrentlySelectedColorBtn("bgButtonCng12");
-                alertDialog.dismiss();
-
-                activityRecreated();
-            }
-        });
-
-        bgButtonCng13.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ColorDrawable buttonColor = (ColorDrawable) bgButtonCng13.getBackground();
-                backgroundColor = buttonColor.getColor();
-                coordinatorLayout.setBackgroundColor(backgroundColor);
-
-                myPreferences.setBackgroundColor(backgroundColor);
-                myPreferences.setCurrentlySelectedColorBtn("bgButtonCng13");
-                alertDialog.dismiss();
-
-                activityRecreated();
-            }
-        });
-
-        bgButtonCng21.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ColorDrawable buttonColor = (ColorDrawable) bgButtonCng21.getBackground();
-                backgroundColor = buttonColor.getColor();
-                coordinatorLayout.setBackgroundColor(backgroundColor);
-
-                myPreferences.setBackgroundColor(backgroundColor);
-                myPreferences.setCurrentlySelectedColorBtn("bgButtonCng21");
-                alertDialog.dismiss();
-
-                activityRecreated();
-            }
-        });
-
-        bgButtonCng22.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ColorDrawable buttonColor = (ColorDrawable) bgButtonCng22.getBackground();
-                backgroundColor = buttonColor.getColor();
-                coordinatorLayout.setBackgroundColor(backgroundColor);
-
-                myPreferences.setBackgroundColor(backgroundColor);
-                myPreferences.setCurrentlySelectedColorBtn("bgButtonCng22");
-                alertDialog.dismiss();
-
-                activityRecreated();
-            }
-        });
-
-        bgButtonCng23.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ColorDrawable buttonColor = (ColorDrawable) bgButtonCng23.getBackground();
-                backgroundColor = buttonColor.getColor();
-                coordinatorLayout.setBackgroundColor(backgroundColor);
-
-                myPreferences.setBackgroundColor(backgroundColor);
-                myPreferences.setCurrentlySelectedColorBtn("bgButtonCng23");
-                alertDialog.dismiss();
-
-                activityRecreated();
-            }
-        });
-
-        String currentBackgroundColorBtn = myPreferences.getCurrentlySelectedColorBtn();
-        switch (currentBackgroundColorBtn) {
-            case "bgButtonCng11":
-                bgButtonCng11.setCompoundDrawablesWithIntrinsicBounds(R.drawable.done_icon, 0, 0, 0);
-                break;
-
-            case "bgButtonCng12":
-                bgButtonCng12.setCompoundDrawablesWithIntrinsicBounds(R.drawable.done_icon, 0, 0, 0);
-                break;
-
-            case "bgButtonCng13":
-                bgButtonCng13.setCompoundDrawablesWithIntrinsicBounds(R.drawable.done_icon, 0, 0, 0);
-                break;
-
-            case "bgButtonCng21":
-                bgButtonCng21.setCompoundDrawablesWithIntrinsicBounds(R.drawable.done_icon, 0, 0, 0);
-                break;
-
-            case "bgButtonCng22":
-                bgButtonCng22.setCompoundDrawablesWithIntrinsicBounds(R.drawable.done_icon, 0, 0, 0);
-                break;
-
-            case "bgButtonCng23":
-                bgButtonCng23.setCompoundDrawablesWithIntrinsicBounds(R.drawable.done_icon, 0, 0, 0);
-                break;
-        }
-    }
-
-    public static int getBackgroundColor(View view) {
-        Drawable drawable = view.getBackground();
-        if (drawable instanceof ColorDrawable) {
-            ColorDrawable colorDrawable = (ColorDrawable) drawable;
-            return colorDrawable.getColor();
-        }
-        return 0;
-    }
-
-    private void activityRecreated() {
-        //after 1 second the activity is recreated
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                recreate();
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            }
-        }, 200);
-    }
 
 
 
@@ -443,4 +315,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void gotToMapActivity(View view) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
 }

@@ -74,6 +74,9 @@
     <string name="restore">Restore</string>
     <string name="about">About</string>
     <string name="about_details">I am Md Zakaria Hossain. I am studying at computer science and engineering in DIU. I still a full time learner with student and I love to learn new technology and also help to other. \n\n\t <b>zakariahossain143@gmail.com</b>\n</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
+    <string name="choose_location">Choose Location</string>
 
     <string-array name="font_size">
         <item>Small</item>

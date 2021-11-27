@@ -43,19 +43,16 @@
                 android:icon="@drawable/font_icon"
                 app:showAsAction="never" />
 
-            <item
-                android:id="@+id/changeBgIcon"
-                android:title="@string/background_change"
-                android:icon="@drawable/bg_change_icon"
-                app:showAsAction="never" />
         </menu>
     </item>
     <item
+        android:id="@+id/ProfileIcon"
         android:orderInCategory="6"
-        android:title="Profile" />
+        android:title="@string/profile" />
     <item
+        android:id="@+id/LogoutIcon"
         android:orderInCategory="7"
-        android:title="Logout" />
+        android:title="@string/logout" />
 
 
 </menu>

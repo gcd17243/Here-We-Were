@@ -26,12 +26,46 @@
                 android:visibility="visible"
                 tools:src="@tools:sample/avatars" />
 
+            <fragment
+                android:id="@+id/mapadd"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="372dp" />
+
             <EditText
                 android:id="@+id/editTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:hint="@string/title"
+                android:inputType="textMultiLine|text"
+                android:lines="3"
+                android:paddingStart="10dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="11dp"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/latid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="lat"
+                android:inputType="textMultiLine|text"
+                android:lines="3"
+                android:paddingStart="10dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="11dp"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/longid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="long"
                 android:inputType="textMultiLine|text"
                 android:lines="3"
                 android:paddingStart="10dp"

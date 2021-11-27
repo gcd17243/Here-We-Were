@@ -12,9 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.herewewere.MapsActivity;
-import com.example.herewewere.ProfileActivity;
 import com.example.herewewere.R;
+import com.example.herewewere.activities.MainActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -93,7 +92,7 @@ public class LoginActivity extends AppCompatActivity  {
                     Boolean checkuserpass = DB.checkemailpassword(user, pass);
                     if(checkuserpass==true){
                         Toast.makeText(LoginActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
-                        Intent intent  = new Intent(getApplicationContext(), MapsActivity.class);
+                        Intent intent  = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                     }else{
                         Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
@@ -137,7 +136,7 @@ public class LoginActivity extends AppCompatActivity  {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             Toast.makeText(this, "Sign-in Successful", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, ProfileActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         } catch (ApiException e) {
             Log.w("Error", "signInResult:failed code=" + e.getStatusCode());
@@ -150,7 +149,7 @@ public class LoginActivity extends AppCompatActivity  {
         if(account!=null)
         {
             Toast.makeText(this, "User already Signed-in", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getApplicationContext(),ProfileActivity.class);
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
             startActivity(intent);
         }
     }
