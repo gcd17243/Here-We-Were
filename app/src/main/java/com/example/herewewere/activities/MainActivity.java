@@ -198,9 +198,7 @@ public class MainActivity extends AppCompatActivity {
                 fontChange();
                 break;
 
-            case R.id.changeBgIcon:
-                backgroundColorChange();
-                break;
+
 
 
 

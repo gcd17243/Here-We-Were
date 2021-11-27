@@ -50,8 +50,12 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
-
+    <item
+        android:orderInCategory="6"
+        android:title="Profile" />
+    <item
+        android:orderInCategory="7"
+        android:title="Logout" />
 
 
 </menu>

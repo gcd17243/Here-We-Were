@@ -56,7 +56,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-
 public class CreateOrShowNoteActivity extends AppCompatActivity implements View.OnClickListener {
 
     private MyNoteDbManager myNoteDbManager;

@@ -44,15 +44,15 @@
                 android:id="@+id/editNote"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="40dp"
                 android:background="@android:color/transparent"
                 android:gravity="start|top"
                 android:hint="@string/note"
-                android:minLines="30"
                 android:inputType="textMultiLine|text"
+                android:minLines="30"
                 android:paddingStart="10dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="10dp"
-                android:layout_marginBottom="40dp"
                 android:textAppearance="?android:textAppearanceMedium" />
 
         </LinearLayout>
