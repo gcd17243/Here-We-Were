@@ -4,6 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.TrashActivity">
+    tools:context=".activities.TrashActivity"
+    android:id="@+id/trashLayout"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:id="@+id/noDataTrash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/trash_empty"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:gravity="center"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewTrash"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:itemCount="4"
+        android:visibility="gone"
+        tools:listitem="@layout/custom_list_grid_view_layout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

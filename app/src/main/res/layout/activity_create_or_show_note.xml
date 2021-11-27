@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activities.CreateOrShowNoteActivity">
 
     <ScrollView
@@ -39,21 +40,27 @@
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textStyle="bold" />
 
+            <EditText
+                android:id="@+id/editNote"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="start|top"
+                android:hint="@string/note"
+                android:minLines="30"
+                android:inputType="textMultiLine|text"
+                android:paddingStart="10dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="10dp"
+                android:layout_marginBottom="40dp"
+                android:textAppearance="?android:textAppearanceMedium" />
+
         </LinearLayout>
     </ScrollView>
 
-    <include
-        android:id="@+id/include2"
-        layout="@layout/bottom_sheet_plus_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent" />
+    <include layout="@layout/bottom_sheet_plus_layout"/>
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/bottom_sheet_more_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+    <include layout="@layout/bottom_sheet_more_layout"/>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView4"
@@ -108,22 +115,4 @@
         </androidx.cardview.widget.CardView>
     </androidx.core.widget.NestedScrollView>
 
-    <EditText
-        android:id="@+id/editNote"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:gravity="start|top"
-        android:hint="@string/note"
-        android:inputType="textMultiLine|text"
-        android:minLines="30"
-        android:paddingStart="10dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="10dp"
-        android:textAppearance="?android:textAppearanceMedium"
-        app:layout_anchor="@+id/scrollView2"
-        app:layout_anchorGravity="center"
-        tools:layout_editor_absoluteX="6dp"
-        tools:layout_editor_absoluteY="216dp" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
