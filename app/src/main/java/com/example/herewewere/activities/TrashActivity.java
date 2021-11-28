@@ -109,6 +109,9 @@ public class TrashActivity extends AppCompatActivity {
         final String title = myNotesListTrash.get(itemId).getTitle();
         final String note = myNotesListTrash.get(itemId).getNote();
         final String imagePath = myNotesListTrash.get(itemId).getImagePath();
+        final String latid = myNotesListTrash.get(itemId).getLatid();
+        final String longid = myNotesListTrash.get(itemId).getLongid();
+
 
         myNotesListTrash.remove(itemId);
         recyclerViewAdapterForTrash.notifyDataSetChanged();
@@ -126,7 +129,7 @@ public class TrashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (!isRestored) {
-                    MyNote myNote = new MyNote(title, note, getCurrentDateAndTime(), imagePath);
+                    MyNote myNote = new MyNote(title, note, getCurrentDateAndTime(), imagePath,latid,longid);
                     myNoteDbManager.addNote(myNote);
                     long deleteStatus = new MyNoteDbManager(TrashActivity.this).deleteTrashNote(id);
 

@@ -77,6 +77,8 @@
     <string name="profile">Profile</string>
     <string name="logout">Logout</string>
     <string name="choose_location">Choose Location</string>
+    <string name="longid">long</string>
+    <string name="lat">lat</string>
 
     <string-array name="font_size">
         <item>Small</item>

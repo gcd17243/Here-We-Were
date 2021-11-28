@@ -33,6 +33,9 @@ public class MyNoteDbManager {
         contentValues.put(ConfigDB.COLUMN_NOTE, myNote.getNote());
         contentValues.put(ConfigDB.COLUMN_DATE, myNote.getDate());
         contentValues.put(ConfigDB.COLUMN_IMAGE_PATH, myNote.getImagePath());
+        contentValues.put(ConfigDB.COLUMN_LATID, myNote.getLatid());
+        contentValues.put(ConfigDB.COLUMN_LONGID, myNote.getLongid());
+
 
         try {
             insert = sqLiteDatabase.insert(ConfigDB.TABLE_NAME, null, contentValues);
@@ -58,7 +61,10 @@ public class MyNoteDbManager {
                     String notes = cursor.getString(cursor.getColumnIndex(ConfigDB.COLUMN_NOTE));
                     String date = cursor.getString(cursor.getColumnIndex(ConfigDB.COLUMN_DATE));
                     String imagePath = cursor.getString(cursor.getColumnIndex(ConfigDB.COLUMN_IMAGE_PATH));
-                    myNote = new MyNote(id, title, notes, date, imagePath);
+                    String latid = cursor.getString(cursor.getColumnIndex(ConfigDB.COLUMN_LATID));
+                    String longid = cursor.getString(cursor.getColumnIndex(ConfigDB.COLUMN_LONGID));
+
+                    myNote = new MyNote(id, title, notes, date, imagePath, latid, longid);
                 }
             }
         } catch (Exception e) {
@@ -90,8 +96,10 @@ public class MyNoteDbManager {
                         String note = cursor.getString(cursor.getColumnIndex(ConfigDB.COLUMN_NOTE));
                         String date = cursor.getString(cursor.getColumnIndex(ConfigDB.COLUMN_DATE));
                         String imagePath = cursor.getString(cursor.getColumnIndex(ConfigDB.COLUMN_IMAGE_PATH));
+                        String latid = cursor.getString(cursor.getColumnIndex(ConfigDB.COLUMN_LATID));
+                        String longid = cursor.getString(cursor.getColumnIndex(ConfigDB.COLUMN_LONGID));
 
-                        MyNote myNote = new MyNote(id, title, note, date, imagePath);
+                        MyNote myNote = new MyNote(id, title, note, date, imagePath, latid, longid);
                         myNotesList.add(myNote);
                     } while (cursor.moveToNext());
 
@@ -119,6 +127,8 @@ public class MyNoteDbManager {
         contentValues.put(ConfigDB.COLUMN_NOTE, myNote.getNote());
         contentValues.put(ConfigDB.COLUMN_DATE, myNote.getDate());
         contentValues.put(ConfigDB.COLUMN_IMAGE_PATH, myNote.getImagePath());
+        contentValues.put(ConfigDB.COLUMN_LATID, myNote.getLatid());
+        contentValues.put(ConfigDB.COLUMN_LONGID, myNote.getLongid());
 
         try {
             rowCount = sqLiteDatabase.update(ConfigDB.TABLE_NAME, contentValues, ConfigDB.COLUMN_ID + " = ? ", new String[]{String.valueOf(myNote.getId())});
@@ -175,6 +185,8 @@ public class MyNoteDbManager {
         contentValues.put(ConfigDB.TRASH_COLUMN_NOTE, myNote.getNote());
         contentValues.put(ConfigDB.TRASH_COLUMN_DATE, myNote.getDate());
         contentValues.put(ConfigDB.TRASH_COLUMN_IMAGE_PATH, myNote.getImagePath());
+        contentValues.put(ConfigDB.COLUMN_LATID, myNote.getLatid());
+        contentValues.put(ConfigDB.COLUMN_LONGID, myNote.getLongid());
 
         try {
             insert = sqLiteDatabase.insert(ConfigDB.TRASH_TABLE_NAME, null, contentValues);
@@ -202,8 +214,10 @@ public class MyNoteDbManager {
                         String note = cursor.getString(cursor.getColumnIndex(ConfigDB.TRASH_COLUMN_NOTE));
                         String date = cursor.getString(cursor.getColumnIndex(ConfigDB.TRASH_COLUMN_DATE));
                         String imagePath = cursor.getString(cursor.getColumnIndex(ConfigDB.TRASH_COLUMN_IMAGE_PATH));
+                        String latid = cursor.getString(cursor.getColumnIndex(ConfigDB.COLUMN_LATID));
+                        String longid = cursor.getString(cursor.getColumnIndex(ConfigDB.COLUMN_LONGID));
 
-                        MyNote myNote = new MyNote(id, title, note, date, imagePath);
+                        MyNote myNote = new MyNote(id, title, note, date, imagePath,latid,longid);
                         myNotesListForTrash.add(myNote);
                     } while (cursor.moveToNext());
 

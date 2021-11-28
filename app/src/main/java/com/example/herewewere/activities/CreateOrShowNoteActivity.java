@@ -18,7 +18,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,7 +30,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,11 +44,9 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -79,7 +75,7 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
     private MyNoteDbManager myNoteDbManager;
     private MyPreferences myPreferences;
 
-    private EditText editTitle, editNote,latid,longid;
+    private EditText editTitle, editNote,editLatid,editLongid;
     private BottomSheetBehavior bottomSheetBehavior;
     private TextView editedDateText;
     private ImageView noteImage;
@@ -90,7 +86,7 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
     private final static int REQUEST_CHOOSE_IMAGE_CODE = 122;
 
     private boolean isUndoClicked, isImageChanged;
-    private String showNoteKey, title, note, imagePath = null;
+    private String showNoteKey, title, note, imagePath = null,latid,longid;
     private int id;
     FusedLocationProviderClient client;
 
@@ -111,8 +107,8 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
 
         editTitle = findViewById(R.id.editTitle);
         editNote = findViewById(R.id.editNote);
-        latid = findViewById(R.id.latid);
-        longid = findViewById(R.id.longid);
+        editLatid = findViewById(R.id.editLatid);
+        editLongid = findViewById(R.id.editLongid);
         editedDateText = findViewById(R.id.editedDate);
         noteImage = findViewById(R.id.noteImage);
         linearLayoutET = findViewById(R.id.linearLayoutEt);
@@ -138,7 +134,10 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
 
         client = LocationServices.getFusedLocationProviderClient(this);
 
-
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapadd);
+        mapFragment.getMapAsync(this);
 
         createOrDisplaySavedData();
 
@@ -175,9 +174,14 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
             note = myNote.getNote();
             myDate = myNote.getDate();
             imagePath = myNote.getImagePath();
+            latid = myNote.getLatid();
+            longid = myNote.getLongid();
+
 
             editTitle.setText(title);
             editNote.setText(note);
+            editLatid.setText(latid);
+            editLongid.setText(longid);
             editedDateText.setText(myDate);
 
             if (imagePath != null) {
@@ -260,10 +264,12 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
     private void savedOrUpdateNote() {
         String currentTitle = editTitle.getText().toString();
         String currentNote = editNote.getText().toString();
+        String currentLatid = editLatid.getText().toString();
+        String currentLongid = editLongid.getText().toString();
 
         if (id > 0) {
-            if (!title.equals(currentTitle) || !note.equals(currentNote) || isImageChanged) {
-                MyNote myNote = new MyNote(id, currentTitle, currentNote, getCurrentDateAndTime(), imagePath);
+            if (!title.equals(currentTitle) || !note.equals(currentNote) || isImageChanged || !latid.equals(currentLatid) || !longid.equals(currentLongid)) {
+                MyNote myNote = new MyNote(id, currentTitle, currentNote, getCurrentDateAndTime(), imagePath,currentLatid,currentLongid);
                 long isUpdate = myNoteDbManager.updateNote(myNote);
 
                 if (isUpdate <= 0) {
@@ -271,8 +277,8 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
                 }
             }
         } else {
-            if (!currentTitle.trim().isEmpty() || !currentNote.trim().isEmpty() || isImageChanged) {
-                MyNote myNote = new MyNote(currentTitle, currentNote, getCurrentDateAndTime(), imagePath);
+            if (!currentTitle.trim().isEmpty() || !currentNote.trim().isEmpty() || isImageChanged || !currentLatid.trim().isEmpty() || !currentLongid.trim().isEmpty()  ) {
+                MyNote myNote = new MyNote(currentTitle, currentNote, getCurrentDateAndTime(), imagePath,currentLatid,currentLongid);
                 long isInsert = myNoteDbManager.addNote(myNote);
 
                 if (isInsert <= 0) {
@@ -313,14 +319,20 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
     private void resetNote() {
         editTitle.setText("");
         editNote.setText("");
+        editLatid.setText("");
+        editLongid.setText("");
     }
 
     private void deleteNote() {
         title = editTitle.getText().toString();
         note = editNote.getText().toString();
+        latid = editLatid.getText().toString();
+        longid = editLongid.getText().toString();
 
         editTitle.setText("");
         editNote.setText("");
+        editLatid.setText("");
+        editLongid.setText("");
         noteImage.setVisibility(View.GONE);
 
         Snackbar snackbar = Snackbar.make(linearLayoutET, "Note moves to trash", Snackbar.LENGTH_INDEFINITE).setAction("Undo", new View.OnClickListener() {
@@ -329,10 +341,15 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
                 isUndoClicked = true;
                 editTitle.setText(title);
                 editNote.setText(note);
+                editLatid.setText(latid);
+                editLongid.setText(longid);
                 noteImage.setVisibility(View.VISIBLE);
 
                 editTitle.setSelection(editTitle.getText().length());
                 editNote.setSelection(editNote.getText().length());
+                editLatid.setSelection(editLatid.getText().length());
+                editLongid.setSelection(editLongid.getText().length());
+
             }
         }).setActionTextColor(Color.YELLOW);
         snackbar.show();
@@ -342,7 +359,7 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
             public void run() {
                 if (!isUndoClicked) {
                     if (id > 0) {
-                        MyNote myNote = new MyNote(title, note, getCurrentDateAndTime(), imagePath);
+                        MyNote myNote = new MyNote(title, note, getCurrentDateAndTime(), imagePath,latid,longid);
                         long isInsert = myNoteDbManager.addNoteToTrash(myNote);
 
                         if (isInsert > 0) {
@@ -492,7 +509,7 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
             Toast.makeText(this, "Please, enable your note sharing option from settings", Toast.LENGTH_LONG).show();
 
         } else {
-            if (!editTitle.getText().toString().trim().isEmpty() || !editNote.getText().toString().trim().isEmpty()) {
+            if (!editTitle.getText().toString().trim().isEmpty() || !editNote.getText().toString().trim().isEmpty()|| !editLatid.getText().toString().trim().isEmpty()|| !editLongid.getText().toString().trim().isEmpty()) {
                 Intent intent = new Intent(android.content.Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(android.content.Intent.EXTRA_SUBJECT, editTitle.getText().toString());
@@ -505,8 +522,8 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
     }
 
     private void makeACopyOfNote() {
-        if (!editTitle.getText().toString().trim().isEmpty() || !editNote.getText().toString().trim().isEmpty() || imagePath != null) {
-            MyNote myNote = new MyNote(editTitle.getText().toString(), editNote.getText().toString(), getCurrentDateAndTime(), imagePath);
+        if (!editTitle.getText().toString().trim().isEmpty() || !editNote.getText().toString().trim().isEmpty() || imagePath != null|| !editLatid.getText().toString().trim().isEmpty()|| !editLongid.getText().toString().trim().isEmpty()) {
+            MyNote myNote = new MyNote(editTitle.getText().toString(), editNote.getText().toString(), getCurrentDateAndTime(), imagePath,editLatid.getText().toString(),editLongid.getText().toString());
             long insert = myNoteDbManager.addNote(myNote);
 
             if (insert > 0) {
@@ -702,8 +719,8 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
                             //Create Maker Options
                             String latitude = String.valueOf(location.getLatitude());
                             String longitude = String.valueOf(location.getLongitude());
-                            latid.setText(latitude);
-                            longid.setText(longitude);
+                            editLatid.setText(latitude);
+                            editLongid.setText(longitude);
                             //Zoom Map
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
                         }
@@ -716,18 +733,28 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
+        double valuelat;
+        double valuelong;
+if(latid == null||longid == null){
+    valuelat=0;
+    valuelong=0;
+}else{
+    valuelat = Double.parseDouble(latid);
+    valuelong = Double.parseDouble(longid);
+}
+
 
         mMap = googleMap;
+
+        LatLng latLng = new LatLng(valuelat, valuelong);
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+
         // Add a marker in Sydney and move the camera
         if (imagePath==null){
-            LatLng sydney = new LatLng(latid.getId(), longid.getId());
-            mMap.addMarker(new MarkerOptions().position(sydney).title(title));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            mMap.addMarker(new MarkerOptions().position(latLng).title(title));
 
         }else{
-            LatLng sydney = new LatLng(latid.getId(), longid.getId());
-            mMap.addMarker(new MarkerOptions().position(sydney).title(title).icon(BitmapDescriptorFactory.fromPath(imagePath)));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            mMap.addMarker(new MarkerOptions().position(latLng).title(title).icon(BitmapDescriptorFactory.fromPath(imagePath)));
         }
 
     }
