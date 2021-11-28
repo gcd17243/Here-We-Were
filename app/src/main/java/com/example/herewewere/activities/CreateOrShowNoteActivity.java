@@ -334,51 +334,12 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
         editLatid.setText("");
         editLongid.setText("");
         noteImage.setVisibility(View.GONE);
-
-        Snackbar snackbar = Snackbar.make(linearLayoutET, "Note moves to trash", Snackbar.LENGTH_INDEFINITE).setAction("Undo", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isUndoClicked = true;
-                editTitle.setText(title);
-                editNote.setText(note);
-                editLatid.setText(latid);
-                editLongid.setText(longid);
-                noteImage.setVisibility(View.VISIBLE);
-
-                editTitle.setSelection(editTitle.getText().length());
-                editNote.setSelection(editNote.getText().length());
-                editLatid.setSelection(editLatid.getText().length());
-                editLongid.setSelection(editLongid.getText().length());
-
-            }
-        }).setActionTextColor(Color.YELLOW);
-        snackbar.show();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (!isUndoClicked) {
-                    if (id > 0) {
-                        MyNote myNote = new MyNote(title, note, getCurrentDateAndTime(), imagePath,latid,longid);
-                        long isInsert = myNoteDbManager.addNoteToTrash(myNote);
-
-                        if (isInsert > 0) {
-                            long isDelete = myNoteDbManager.deleteNote(id);
-
-                            if (isDelete > 0) {
-                                Intent intent = new Intent(CreateOrShowNoteActivity.this, MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-
-                            } else {
-                                Toast.makeText(CreateOrShowNoteActivity.this, "Note not delete.", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                }
-            }
-        }, 3000);
+        if (id > 0) {
+            myNoteDbManager.deleteNote(id);
+            Toast.makeText(CreateOrShowNoteActivity.this, "Note delete.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(CreateOrShowNoteActivity.this, "Note not delete.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private String getCurrentDateAndTime() {
