@@ -30,7 +30,37 @@
                 android:id="@+id/mapadd"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="372dp" />
+                android:layout_height="242dp" />
+
+            <EditText
+                android:id="@+id/editLatid"
+                android:layout_width="match_parent"
+                android:layout_height="29dp"
+                android:background="@android:color/transparent"
+                android:hint="@string/lat"
+                android:inputType="textMultiLine|text"
+                android:lines="3"
+                android:paddingStart="10dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="11dp"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+            <EditText
+                android:id="@+id/editLongid"
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:background="@android:color/transparent"
+                android:hint="@string/longid"
+                android:inputType="textMultiLine|text"
+                android:lines="3"
+                android:paddingStart="10dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="11dp"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textStyle="bold"
+                android:visibility="visible" />
 
             <EditText
                 android:id="@+id/editTitle"
@@ -60,36 +90,6 @@
                 android:paddingTop="10dp"
                 android:paddingEnd="10dp"
                 android:textAppearance="?android:textAppearanceMedium" />
-
-            <EditText
-                android:id="@+id/editLatid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:hint="@string/lat"
-                android:inputType="textMultiLine|text"
-                android:lines="3"
-                android:paddingStart="10dp"
-                android:paddingTop="5dp"
-                android:paddingEnd="11dp"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textStyle="bold"
-                android:visibility="visible" />
-
-            <EditText
-                android:id="@+id/editLongid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:hint="@string/longid"
-                android:inputType="textMultiLine|text"
-                android:lines="3"
-                android:paddingStart="10dp"
-                android:paddingTop="5dp"
-                android:paddingEnd="11dp"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textStyle="bold"
-                android:visibility="visible" />
 
         </LinearLayout>
     </ScrollView>

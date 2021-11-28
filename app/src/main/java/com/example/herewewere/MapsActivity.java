@@ -14,13 +14,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.herewewere.activities.CreateOrShowNoteActivity;
 import com.example.herewewere.activities.MainActivity;
 import com.example.herewewere.databases.MyNoteDbManager;
-import com.example.herewewere.models.MyNote;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,7 +28,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.herewewere.databinding.ActivityMapsBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,13 +39,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap Map;
     private MyNoteDbManager myNoteDbManager;
-    private List<MyNote> myNotesList;
 
     SupportMapFragment mapFragment;
     SearchView searchView;
     FusedLocationProviderClient client;
-    FloatingActionButton floatingActionButton,floatingActionButton2;
-    private String title, note, imagePath = null,latid,longid;
+    FloatingActionButton floatingActionButton, floatingActionButton2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +56,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         myNoteDbManager = new MyNoteDbManager(this);
 
 
-
         //Assign Variable
         searchView = findViewById(R.id.sv_location);
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -72,34 +66,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Check permission
         if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED){
+                == PackageManager.PERMISSION_GRANTED) {
             //When permission Granted
             //Call method
             getCurrentLocation();
-        }else {
+        } else {
             //When permission Denied
             //Request permission
             ActivityCompat.requestPermissions(MapsActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
 
         //Searching function
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                String location =searchView.getQuery().toString();
+                String location = searchView.getQuery().toString();
 
                 List<Address> addressList = null;
 
-                if (location != null || !location.equals("")){
+                if (location != null || !location.equals("")) {
                     Geocoder geocoder = new Geocoder(MapsActivity.this);
                     try {
                         addressList = geocoder.getFromLocationName(location, 1);
-                    } catch (IOException e){
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                     Address address = addressList.get(0);
-                    LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                     Map.addMarker(new MarkerOptions().position(latLng).title(location));
                     Map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                 }
@@ -113,8 +107,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         mapFragment.getMapAsync(this);
     }
+
     private void getCurrentLocation() {
         //Initialize task Location
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                 return;
+        }
         Task<Location> task = client.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
@@ -141,8 +139,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 44){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 44) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //When permission Granted
                 //Call method
                 getCurrentLocation();
@@ -152,6 +151,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
+        String title, imagePath ,latid,longid;
+
         Map = googleMap;
         double valuelat;
         double valuelong;
