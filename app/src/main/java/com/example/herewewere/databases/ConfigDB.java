@@ -15,14 +15,6 @@ public class ConfigDB {
     static final String COLUMN_LATID = "latid";
     static final String COLUMN_LONGID = "longid";
 
-    static final String TRASH_TABLE_NAME = "notes_table_trash";
 
-    static final String TRASH_COLUMN_ID = "trash_id";
-    static final String TRASH_COLUMN_TITLE = "trash_title";
-    static final String TRASH_COLUMN_NOTE = "trash_note";
-    static final String TRASH_COLUMN_DATE = "trash_date";
-    static final String TRASH_COLUMN_IMAGE_PATH = "trash_image_path";
-    static final String TRASH_COLUMN_LATID = "trash_latid";
-    static final String TRASH_COLUMN_LONGID = "trash_longid";
 
 }

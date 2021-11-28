@@ -334,6 +334,7 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
         editLatid.setText("");
         editLongid.setText("");
         noteImage.setVisibility(View.GONE);
+
         if (id > 0) {
             myNoteDbManager.deleteNote(id);
             Toast.makeText(CreateOrShowNoteActivity.this, "Note delete.", Toast.LENGTH_SHORT).show();

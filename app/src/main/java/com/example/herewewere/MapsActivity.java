@@ -112,12 +112,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         public void onMapReady(@NonNull GoogleMap googleMap) {
                             //Initialize lat Lng
                             LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
-                            //Create Maker Options
-                            MarkerOptions options = new MarkerOptions().position(latLng).title("You Are Here");
+
                             //Zoom Map
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
-                            //Add Maker on map
-                            googleMap.addMarker(options);
+
                         }
                     });
 
@@ -140,6 +138,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         Map = googleMap;
+
     }
 
     public void gotToMapActivity(View view) {

@@ -25,12 +25,6 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/trashIcon"
-        android:orderInCategory="4"
-        android:title="@string/trash"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/settingsMenuIcon"
         app:showAsAction="never"
         android:orderInCategory="5"

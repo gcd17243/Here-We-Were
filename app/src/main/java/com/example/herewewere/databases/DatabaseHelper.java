@@ -10,8 +10,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_MY_NOTES_TABLE = "CREATE TABLE " + ConfigDB.TABLE_NAME + "(" + ConfigDB.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + ConfigDB.COLUMN_TITLE + " TEXT, " + ConfigDB.COLUMN_NOTE + " TEXT, " + ConfigDB.COLUMN_DATE + " TEXT, "+ConfigDB.COLUMN_IMAGE_PATH+" TEXT, "+ ConfigDB.COLUMN_LATID +" TEXT, "+ ConfigDB.COLUMN_LONGID +" TEXT);";
 
-    private static final String CREATE_MY_NOTES_TRASH_TABLE = "CREATE TABLE "+ ConfigDB.TRASH_TABLE_NAME+"("+ ConfigDB.TRASH_COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+ ConfigDB.TRASH_COLUMN_TITLE+" TEXT, "+ ConfigDB.TRASH_COLUMN_NOTE+" TEXT, "+ConfigDB.TRASH_COLUMN_DATE+" TEXT, "+ConfigDB.TRASH_COLUMN_IMAGE_PATH+" TEXT, "+ConfigDB.TRASH_COLUMN_LATID+" TEXT,"+ConfigDB.TRASH_COLUMN_LONGID+" TEXT);";
-
     private DatabaseHelper(Context context) {
         super(context, ConfigDB.DATABASE_NAME, null, ConfigDB.DATABASE_VERSION);
     }
@@ -26,13 +24,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_MY_NOTES_TABLE);
-        db.execSQL(CREATE_MY_NOTES_TRASH_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + ConfigDB.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + ConfigDB.TRASH_TABLE_NAME);
         onCreate(db);
     }
 }

@@ -198,11 +198,6 @@ public class MainActivity extends AppCompatActivity {
                 displayAllNotes();
                 break;
 
-            case R.id.trashIcon:
-                startActivity(new Intent(this, TrashActivity.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                break;
-
             case R.id.deleteAllNoteIcon:
                 deleteAllNotes();
                 break;
@@ -244,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
         myNotesList.clear();
         recyclerViewAdapter.notifyDataSetChanged();
 
-        final Snackbar snackbar = Snackbar.make(findViewById(R.id.coordinatorLayout), "All notes moves to trash", Snackbar.LENGTH_INDEFINITE).setAction("Undo", new View.OnClickListener() {
+        final Snackbar snackbar = Snackbar.make(findViewById(R.id.coordinatorLayout), "All notes delete", Snackbar.LENGTH_INDEFINITE).setAction("Undo", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isUndoClicked = true;
@@ -260,9 +255,6 @@ public class MainActivity extends AppCompatActivity {
                 if (!isUndoClicked) {
                     myNotesList = myNoteDbManager.getAllNotes();
 
-                    for (MyNote myNotesData : myNotesList) {
-                        myNoteDbManager.addNoteToTrash(myNotesData);
-                    }
 
                     boolean deleteStatus = myNoteDbManager.deleteAllNotes();
                     if (deleteStatus) {
@@ -303,10 +295,6 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.create().show();
     }
-
-
-
-
 
     @Override
     public void onBackPressed() {
