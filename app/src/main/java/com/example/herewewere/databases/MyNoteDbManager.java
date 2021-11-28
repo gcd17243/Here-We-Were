@@ -175,8 +175,13 @@ public class MyNoteDbManager {
 
         return deleteStatus;
     }
-
-
-
-
+public Cursor getAllData(){
+    SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
+    Cursor res = sqLiteDatabase.rawQuery("select * from "+ConfigDB.TABLE_NAME,null);
+    return res;
 }
+}
+
+
+
+
