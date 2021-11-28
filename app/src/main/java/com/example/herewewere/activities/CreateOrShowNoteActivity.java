@@ -733,18 +733,23 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+
         double valuelat;
         double valuelong;
-if(latid == null||longid == null){
-    valuelat=0;
-    valuelong=0;
-}else{
-    valuelat = Double.parseDouble(latid);
-    valuelong = Double.parseDouble(longid);
+
+        valuelat=0;
+        valuelong=0;
+        if(latid != null||longid != null){
+    try
+    {   valuelat = Double.parseDouble(latid);
+        valuelong = Double.parseDouble(longid);
+        // it means it is double
+    } catch (Exception e1) {
+        e1.printStackTrace();
+    }
+
 }
-
-
-        mMap = googleMap;
 
         LatLng latLng = new LatLng(valuelat, valuelong);
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
