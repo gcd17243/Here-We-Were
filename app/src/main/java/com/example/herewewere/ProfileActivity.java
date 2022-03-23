@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -27,6 +28,8 @@ public class ProfileActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     TextView userName, userFirstName, userSecondName, userEmail, userId;
     ImageView profileImage;
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +41,12 @@ public class ProfileActivity extends AppCompatActivity {
         userId = (TextView) findViewById(R.id.userID);
         profileImage = (ImageView) findViewById(R.id.profileimage);
         signout = (Button) findViewById(R.id.signout);
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mAuth = FirebaseAuth.getInstance();
 
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
@@ -71,6 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }   }  });}
 
     private void signOut() {
+        FirebaseAuth.getInstance().signOut();
         mGoogleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override

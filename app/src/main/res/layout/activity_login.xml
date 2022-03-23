@@ -56,6 +56,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/offlinebtn"
+        android:layout_width="148dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="84dp"
+        android:text="@string/offlineBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/Author"
         android:layout_width="wrap_content"
@@ -127,10 +137,11 @@
         android:id="@+id/GoogleLogin"
         android:layout_width="153dp"
         android:layout_height="56dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/offlinebtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginbtn" />
+        app:layout_constraintTop_toBottomOf="@+id/loginbtn"
+        app:layout_constraintVertical_bias="0.83" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

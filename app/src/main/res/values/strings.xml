@@ -15,7 +15,7 @@
     <string name="resgister">RESGISTER</string>
     <string name="retype_password">Retype Password</string>
     <string name="email_adress">Email Adress</string>
-    <string name="map_key">AIzaSyBrvAAT_-boAuognNl5lwl0B9hUqQQ4kvM</string>
+    <string name="map_key">AIzaSyC1s9ZCYZ-VLD8sJMPknKkS7bctJgLlric</string>
 
     <string name="search_icon">Search</string>
     <string name="list_view_icon">List View</string>
@@ -79,6 +79,7 @@
     <string name="choose_location">Choose Location</string>
     <string name="longid">long</string>
     <string name="lat">lat</string>
+    <string name="offlineBtn">Offline mode</string>
 
     <string-array name="font_size">
         <item>Small</item>
