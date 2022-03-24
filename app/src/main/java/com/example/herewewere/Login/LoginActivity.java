@@ -75,11 +75,8 @@ public class LoginActivity extends AppCompatActivity  {
         Googlelogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.GoogleLogin:
-                        signIn();
-                        break;
-                }}});
+                        signInGoogle();
+                }});
         //Login
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,7 +184,7 @@ rsDialog.create().show();
         });
     }
 
-    private void signIn() {
+    private void signInGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
