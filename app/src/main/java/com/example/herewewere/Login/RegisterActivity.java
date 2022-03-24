@@ -1,5 +1,6 @@
 package com.example.herewewere.Login;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,12 +14,18 @@ import android.widget.Toast;
 
 import com.example.herewewere.R;
 import com.example.herewewere.activities.MainActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText email, password, repassword;
     Button signup;
-    UserDB DB;
+
     TextView banner;
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +36,9 @@ public class RegisterActivity extends AppCompatActivity {
         repassword = (EditText) findViewById(R.id.repassword);
         signup = (Button) findViewById(R.id.registerbtn);
         banner = (TextView) findViewById(R.id.banner);
-        DB = new UserDB(this);
+        mAuth = FirebaseAuth.getInstance();
+
+
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,26 +86,30 @@ public class RegisterActivity extends AppCompatActivity {
                 else{
                     //Check if password match repassword
                     if(pass.equals(repass)){
-                        Boolean checkuser = DB.checkemail(user);
-                        //Check already exit user
-                        if(checkuser==false){
-                            Boolean insert = DB.insertData(user, pass);
-                            //Check if data is insert
-                            if(insert==true){
-                                Toast.makeText(RegisterActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent);
-                            }else{
-                                Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                        //check register in firebase
+                        mAuth.createUserWithEmailAndPassword(user,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()){
+                                    Toast.makeText(RegisterActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                }
+                                else{
+                                    Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                                }
+
                             }
-                        }
-                        else{
-                            Toast.makeText(RegisterActivity.this, "User already exists! please sign in", Toast.LENGTH_SHORT).show();
-                        }
-                    }else{
+                        });
+
+
+
+                    }
+                     else{
                         Toast.makeText(RegisterActivity.this, "Passwords not matching", Toast.LENGTH_SHORT).show();
                     }
-                } }
+                }
+            }
         });
         //Go to LoginActivity
         banner.setOnClickListener(new View.OnClickListener() {

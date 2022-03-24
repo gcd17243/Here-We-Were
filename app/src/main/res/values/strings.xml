@@ -80,6 +80,7 @@
     <string name="longid">long</string>
     <string name="lat">lat</string>
     <string name="offlineBtn">Offline mode</string>
+    <string name="fgPassword">Forgot password</string>
 
     <string-array name="font_size">
         <item>Small</item>

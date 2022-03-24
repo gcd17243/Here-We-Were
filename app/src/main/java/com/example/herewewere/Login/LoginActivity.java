@@ -1,8 +1,10 @@
 package com.example.herewewere.Login;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,10 +33,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity  {
     SignInButton Googlelogin;
-    TextView register,banner;
+    TextView register,banner,fgpassword;
     EditText email, password;
     Button loginbtn,offlinebtn;
-    UserDB DB;
     GoogleSignInClient mGoogleSignInClient;
 
     //firebase
@@ -53,19 +54,20 @@ public class LoginActivity extends AppCompatActivity  {
         password = (EditText) findViewById(R.id.password);
         loginbtn = (Button) findViewById(R.id.loginbtn);
         offlinebtn = (Button) findViewById(R.id.offlinebtn);
+        Googlelogin = (SignInButton) findViewById(R.id.GoogleLogin);
+
         //Set text as button
         register = (TextView) findViewById(R.id.register);
+        fgpassword = (TextView) findViewById(R.id.FgPassword);
         banner = (TextView) findViewById(R.id.Banner);
-        Googlelogin = (SignInButton) findViewById(R.id.GoogleLogin);
 
 //firebase
         mAuth = FirebaseAuth.getInstance();
 
 
-        DB = new UserDB(this);
         //Set google sign in function
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken(getString(R.string. default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -107,15 +109,24 @@ public class LoginActivity extends AppCompatActivity  {
 
                     Toast.makeText(LoginActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
                 else{
-                    //If user match
-                    Boolean checkuserpass = DB.checkemailpassword(user, pass);
-                    if(checkuserpass==true){
-                        Toast.makeText(LoginActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
-                        Intent intent  = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
-                    }else{
-                        Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
-                    }
+                    mAuth.signInWithEmailAndPassword(user,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                Toast.makeText(LoginActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
+
+                            }
+                            else{
+                                Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    });
+
+
                 }
             }
         });
@@ -125,6 +136,37 @@ public class LoginActivity extends AppCompatActivity  {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(intent);
+            }
+        });
+        //Forgot password
+        fgpassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText resetMail = new EditText(v.getContext());
+                final AlertDialog.Builder rsDialog = new AlertDialog.Builder(v.getContext());
+                rsDialog.setTitle("Reset Password");
+                rsDialog.setMessage("Enter your Email for reset email link");
+                rsDialog.setView(resetMail);
+                rsDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                       //get User Email
+                        String mail = resetMail.getText().toString();
+                        mAuth.sendPasswordResetEmail(mail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("Sent", "Email sent.");
+                                }
+                                else{
+                                    Log.d("Fail", "Email is not sent.");
+
+                                }
+                            }
+                        });
+                    }
+                });
+rsDialog.create().show();
             }
         });
         //Offline mode
