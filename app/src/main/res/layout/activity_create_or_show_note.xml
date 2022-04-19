@@ -124,7 +124,8 @@
                     android:background="@android:color/transparent"
                     android:onClick="plusHorizontalView"
                     android:padding="6dp"
-                    app:srcCompat="@drawable/ic_plus_circular_symbol" />
+                    app:srcCompat="@drawable/ic_plus_circular_symbol"
+                    tools:ignore="SpeakableTextPresentCheck" />
 
                 <TextView
                     android:id="@+id/editedDate"
@@ -145,7 +146,8 @@
                     android:background="@android:color/transparent"
                     android:onClick="moreHorizontalView"
                     android:padding="6dp"
-                    app:srcCompat="@drawable/ic_more_circular_symbol" />
+                    app:srcCompat="@drawable/ic_more_circular_symbol"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

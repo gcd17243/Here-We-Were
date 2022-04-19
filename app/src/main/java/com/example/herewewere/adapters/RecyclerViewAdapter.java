@@ -88,6 +88,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Intent intent = new Intent(context, CreateOrShowNoteActivity.class);
                 intent.putExtra("our_note_key", "show_note_here");
                 intent.putExtra("id", myNote.getId());
+                //edit this 4/18/2022
                 context.startActivity(intent);
             }
         });

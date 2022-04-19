@@ -24,11 +24,13 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.text.Layout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,6 +39,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.herewewere.R;
+import com.example.herewewere.databases.FBDatabasePost;
+import com.example.herewewere.databases.FBPost;
 import com.example.herewewere.databases.MyNoteDbManager;
 import com.example.herewewere.models.MyNote;
 import com.example.herewewere.preferences.MyPreferences;
@@ -56,6 +60,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -67,6 +73,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -79,6 +86,9 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
     private BottomSheetBehavior bottomSheetBehavior;
     private TextView editedDateText;
     private ImageView noteImage;
+    private View map;
+    private Button uploadBtn,editBtn;
+
     private LinearLayout linearLayoutET, bottomSheetLinearLayout, deleteNoteLL, makeACopyLL, sendNoteLL, takePhotoLL, chooseImageLL,getlocation;
     private GoogleMap mMap;
 
@@ -86,8 +96,11 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
     private final static int REQUEST_CHOOSE_IMAGE_CODE = 122;
 
     private boolean isUndoClicked, isImageChanged;
-    private String showNoteKey, title, note, imagePath = null,latid,longid;
+    private String showNoteKey, title, note, imagePath = null,latid,longid,fbid;
     private int id;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+
     FusedLocationProviderClient client;
 
 
@@ -112,6 +125,8 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
         editedDateText = findViewById(R.id.editedDate);
         noteImage = findViewById(R.id.noteImage);
         linearLayoutET = findViewById(R.id.linearLayoutEt);
+        map = findViewById(R.id.mapadd);
+
 
 
         deleteNoteLL = findViewById(R.id.deleteNoteLL);
@@ -132,7 +147,11 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
         chooseImageLL.setOnClickListener(this);
         getlocation.setOnClickListener(this);
 
+
         client = LocationServices.getFusedLocationProviderClient(this);
+        //4/17/2022
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -192,6 +211,12 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
                         .into(noteImage);
             }
 
+if(latid != null){
+    map.setVisibility(View.VISIBLE);
+}
+else{
+    map.setVisibility(View.GONE);
+}
             editTitle.setSelection(editTitle.getText().length());
             editNote.setSelection(editNote.getText().length());
 
@@ -260,12 +285,61 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
 
         super.onBackPressed();
     }
+    FBDatabasePost fbpost = new FBDatabasePost();
 
     private void savedOrUpdateNote() {
         String currentTitle = editTitle.getText().toString();
         String currentNote = editNote.getText().toString();
         String currentLatid = editLatid.getText().toString();
         String currentLongid = editLongid.getText().toString();
+        //edit this
+/*
+if (fbid !=null) {
+    id=-1;
+    if (!title.equals(currentTitle) || !note.equals(currentNote) || isImageChanged || !latid.equals(currentLatid) || !longid.equals(currentLongid)) {
+        editBtn.setVisibility(View.VISIBLE);
+        editBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                HashMap<String,Object> hashMap =new HashMap<>();
+                hashMap.put("title",currentTitle);
+                hashMap.put("note",currentNote);
+                hashMap.put("imgpath",imagePath);
+                hashMap.put("latid",currentLatid);
+                hashMap.put("longid",currentLongid);
+                fbpost.update(fbid,hashMap).addOnSuccessListener(suc ->
+                {
+                    Toast.makeText(CreateOrShowNoteActivity.this,"Update in Firebase",Toast.LENGTH_SHORT).show();
+                }).addOnFailureListener(er ->
+                {
+                    Toast.makeText(CreateOrShowNoteActivity.this,""+er.getMessage(),Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+}else{
+    if (!currentTitle.trim().isEmpty() || !currentNote.trim().isEmpty() || isImageChanged || !currentLatid.trim().isEmpty() || !currentLongid.trim().isEmpty()  ) {
+        uploadBtn.setVisibility(View.VISIBLE);
+        uploadBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+
+                FBPost post = new FBPost(currentTitle, currentNote, getCurrentDateAndTime(), imagePath,currentLatid,currentLongid,firebaseUser.getProviderId(),0);
+                fbpost.add(post).addOnSuccessListener(suc ->
+                {
+                    Toast.makeText(CreateOrShowNoteActivity.this,"Save in Firebase",Toast.LENGTH_SHORT).show();
+                }).addOnFailureListener(er ->
+                {
+                    Toast.makeText(CreateOrShowNoteActivity.this,""+er.getMessage(),Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+}
+*/
 
         if (id > 0) {
             if (!title.equals(currentTitle) || !note.equals(currentNote) || isImageChanged || !latid.equals(currentLatid) || !longid.equals(currentLongid)) {
@@ -287,7 +361,6 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
             }
         }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.pin_archive_menu, menu);
@@ -334,7 +407,7 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
         editLatid.setText("");
         editLongid.setText("");
         noteImage.setVisibility(View.GONE);
-
+        //fbpost.delete(fbid);
         if (id > 0) {
             myNoteDbManager.deleteNote(id);
             Toast.makeText(CreateOrShowNoteActivity.this, "Note delete.", Toast.LENGTH_SHORT).show();
@@ -607,7 +680,7 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
 
     private String saveToInternalStorage(Bitmap bitmapData) {
         ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
-
+//edit this 03/04/2022
         if (id > 0) {
             if (imagePath != null) {
                 File currentFilePath = new File(imagePath);
