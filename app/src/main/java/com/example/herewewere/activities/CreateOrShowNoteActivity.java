@@ -210,13 +210,15 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
                         .load(imagePath)
                         .into(noteImage);
             }
-
+/*
+//not use 4/20/2022
 if(latid != null){
     map.setVisibility(View.VISIBLE);
 }
 else{
     map.setVisibility(View.GONE);
 }
+ */
             editTitle.setSelection(editTitle.getText().length());
             editNote.setSelection(editNote.getText().length());
 
@@ -357,7 +359,17 @@ if (fbid !=null) {
 
                 if (isInsert <= 0) {
                     Toast.makeText(this, "Note not created", Toast.LENGTH_LONG).show();
+
                 }
+
+                FBPost post = new FBPost(currentTitle, currentNote, getCurrentDateAndTime(), imagePath,currentLatid,currentLongid,firebaseUser.getEmail(),0);
+                fbpost.add(post).addOnSuccessListener(suc ->
+                {
+                    Toast.makeText(CreateOrShowNoteActivity.this,"Save in Firebase",Toast.LENGTH_SHORT).show();
+                }).addOnFailureListener(er ->
+                {
+                    Toast.makeText(CreateOrShowNoteActivity.this,""+er.getMessage(),Toast.LENGTH_SHORT).show();
+                });
             }
         }
     }
@@ -794,7 +806,9 @@ if (fbid !=null) {
             mMap.addMarker(new MarkerOptions().position(latLng).title(title));
 
         }else{
-            mMap.addMarker(new MarkerOptions().position(latLng).title(title).icon(BitmapDescriptorFactory.fromPath(imagePath)));
+            Bitmap b = BitmapFactory.decodeFile(imagePath);
+            Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+            mMap.addMarker(new MarkerOptions().position(latLng).title(title).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
         }
 
     }

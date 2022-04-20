@@ -8,6 +8,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -190,7 +192,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Map.addMarker(new MarkerOptions().position(latLng).title(title));
 
             }else{
-                Map.addMarker(new MarkerOptions().position(latLng).title(title).icon(BitmapDescriptorFactory.fromPath(imagePath)));
+                Bitmap b = BitmapFactory.decodeFile(imagePath);
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+                Map.addMarker(new MarkerOptions().position(latLng).title(title).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
             }
 
         }
