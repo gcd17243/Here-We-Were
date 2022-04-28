@@ -8,6 +8,7 @@
         <entry key="..\:/HereWeWere/app/src/debug/res/layout/activity_create_or_show_note.xml" value="0.15534420289855072" />
         <entry key="..\:/HereWeWere/app/src/debug/res/layout/activity_main.xml" value="0.15534420289855072" />
         <entry key="..\:/HereWeWere/app/src/debug/res/layout/activity_trash.xml" value="0.11041666666666666" />
+        <entry key="..\:/HereWeWere/app/src/debug/res/layout/activity_users_search.xml" value="0.13179347826086957" />
         <entry key="..\:/HereWeWere/app/src/debug/res/layout/background_change_layout.xml" value="0.11041666666666666" />
         <entry key="..\:/HereWeWere/app/src/debug/res/layout/bottom_sheet_more_layout.xml" value="0.25" />
         <entry key="..\:/HereWeWere/app/src/debug/res/layout/bottom_sheet_plus_layout.xml" value="0.31" />
@@ -23,7 +24,7 @@
         <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_main2.xml" value="0.1" />
         <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_maps.xml" value="0.2619047619047619" />
-        <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_profile.xml" value="0.13043478260869565" />
+        <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_profile.xml" value="0.25" />
         <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_register.xml" value="0.225" />
         <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_trash.xml" value="0.1" />
         <entry key="..\:/HereWeWere/app/src/main/res/menu/main_menu.xml" value="0.25" />

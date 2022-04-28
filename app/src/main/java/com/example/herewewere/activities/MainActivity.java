@@ -28,6 +28,7 @@ import com.example.herewewere.Login.LoginActivity;
 import com.example.herewewere.MapsActivity;
 import com.example.herewewere.ProfileActivity;
 import com.example.herewewere.R;
+import com.example.herewewere.Users_Search;
 import com.example.herewewere.adapters.RecyclerViewAdapter;
 import com.example.herewewere.databases.MyNoteDbManager;
 import com.example.herewewere.models.MyNote;
@@ -213,6 +214,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.LogoutIcon:
                 signOut();
                 break;
+            case R.id.User_search:
+                startActivity(new Intent(this, Users_Search.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
         }
         return true;

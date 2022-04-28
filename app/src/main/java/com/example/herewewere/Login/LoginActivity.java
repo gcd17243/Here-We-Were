@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity  {
 
         //Set google sign in function
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string. default_web_client_id))
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -114,7 +114,6 @@ public class LoginActivity extends AppCompatActivity  {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
-
                             }
                             else{
                                 Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();

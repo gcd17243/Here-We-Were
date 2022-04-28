@@ -44,8 +44,11 @@
         android:orderInCategory="6"
         android:title="@string/profile" />
     <item
-        android:id="@+id/LogoutIcon"
         android:orderInCategory="7"
+        android:title="Users Search" />
+    <item
+        android:id="@+id/LogoutIcon"
+        android:orderInCategory="8"
         android:title="@string/logout" />
 
 

@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,12 +58,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -69,6 +77,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -76,6 +85,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 public class CreateOrShowNoteActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
 
@@ -100,9 +110,12 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
     private int id;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
+    FirebaseStorage storage;
+    StorageReference storageReference;
 
     FusedLocationProviderClient client;
-
+    Uri imageUri;
+    String fbImg;
 
     private final static int PLACE_PICKER_REQUEST = 999;
 
@@ -152,6 +165,8 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
         //4/17/2022
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -361,8 +376,7 @@ if (fbid !=null) {
                     Toast.makeText(this, "Note not created", Toast.LENGTH_LONG).show();
 
                 }
-
-                FBPost post = new FBPost(currentTitle, currentNote, getCurrentDateAndTime(), imagePath,currentLatid,currentLongid,firebaseUser.getEmail(),0);
+                FBPost post = new FBPost(currentTitle, currentNote, getCurrentDateAndTime(),fbImg,currentLatid,currentLongid,firebaseUser.getEmail(),0);
                 fbpost.add(post).addOnSuccessListener(suc ->
                 {
                     Toast.makeText(CreateOrShowNoteActivity.this,"Save in Firebase",Toast.LENGTH_SHORT).show();
@@ -519,7 +533,7 @@ if (fbid !=null) {
                 break;
 
             case R.id.sendNoteLL:
-                shareNoteToOtherClientApp();
+                uploadPicture();
                 closeMoreBottomSheetAndKeyboard();
                 break;
 
@@ -656,7 +670,7 @@ if (fbid !=null) {
                         isImageChanged = true;
                         imagePath = saveToInternalStorage(bitmap);
 
-                            noteImage.setVisibility(View.VISIBLE);
+                        noteImage.setVisibility(View.VISIBLE);
                             Glide.with(CreateOrShowNoteActivity.this)
                                     .asBitmap()
                                     .load(bitmap)
@@ -692,11 +706,9 @@ if (fbid !=null) {
 
     private String saveToInternalStorage(Bitmap bitmapData) {
         ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
-//edit this 03/04/2022
         if (id > 0) {
             if (imagePath != null) {
                 File currentFilePath = new File(imagePath);
-
                 if (currentFilePath.exists()) {
                     boolean isDeleted = currentFilePath.delete();
                     if (!isDeleted) {
@@ -729,6 +741,49 @@ if (fbid !=null) {
             }
         }
         return fullImagePath;
+    }
+
+    private void uploadPicture() {
+        imageUri = Uri.fromFile(new File(imagePath));
+
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setTitle("Uploading imgage...");
+        pd.show();
+
+        final String randomKey = UUID.randomUUID().toString();
+        StorageReference storageRef = storage.getReference("image/"+randomKey);
+
+        StorageReference riversRef = storageRef.child("images/"+imageUri.getLastPathSegment());
+        UploadTask uploadTask = riversRef.putFile(imageUri);
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+
+                    throw task.getException();
+                }
+                Toast.makeText(CreateOrShowNoteActivity.this,"Successfully Uploaded",Toast.LENGTH_SHORT).show();
+                if (pd.isShowing())
+                    pd.dismiss();
+                // Continue with the task to get the download URL
+                return riversRef.getDownloadUrl();
+
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    fbImg = downloadUri.toString();
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+        });
+
+
     }
 
     private String getImageName() {
