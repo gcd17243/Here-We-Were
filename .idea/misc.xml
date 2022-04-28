@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/HereWeWere/app/src/debug/res/drawable/create_pattern_bg_style.xml" value="0.24114583333333334" />
         <entry key="..\:/HereWeWere/app/src/debug/res/drawable/splash_screen_launcher_with_logo.xml" value="0.1265625" />
+        <entry key="..\:/HereWeWere/app/src/debug/res/layout-v21/dialogcontent.xml" value="0.33" />
         <entry key="..\:/HereWeWere/app/src/debug/res/layout/activity_create_or_show_note.xml" value="0.15534420289855072" />
         <entry key="..\:/HereWeWere/app/src/debug/res/layout/activity_main.xml" value="0.15534420289855072" />
         <entry key="..\:/HereWeWere/app/src/debug/res/layout/activity_trash.xml" value="0.11041666666666666" />
@@ -20,6 +21,8 @@
         <entry key="..\:/HereWeWere/app/src/main/res/drawable/bg_round.xml" value="0.24114583333333334" />
         <entry key="..\:/HereWeWere/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1265625" />
         <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_create_or_show_note.xml" value="0.33" />
+        <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_fbpost.xml" value="0.25" />
+        <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_fbpostlist.xml" value="0.17" />
         <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_main2.xml" value="0.1" />
@@ -27,8 +30,11 @@
         <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_profile.xml" value="0.25" />
         <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_register.xml" value="0.225" />
         <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_trash.xml" value="0.1" />
+        <entry key="..\:/HereWeWere/app/src/main/res/layout/activity_user_search.xml" value="0.33" />
+        <entry key="..\:/HereWeWere/app/src/main/res/layout/item.xml" value="0.25" />
         <entry key="..\:/HereWeWere/app/src/main/res/menu/main_menu.xml" value="0.25" />
         <entry key="..\:/HereWeWere/app/src/main/res/menu/pin_archive_menu.xml" value="0.21" />
+        <entry key="..\:/HereWeWere/app/src/main/res/menu/searchmenu.xml" value="0.33" />
         <entry key="..\:/HereWeWere/app/src/main/res/menu/trash_menu.xml" value="0.17" />
         <entry key="..\:/HereWeWere/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1265625" />
         <entry key="..\:/HereWeWere/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1265625" />

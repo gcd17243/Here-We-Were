@@ -335,27 +335,7 @@ if (fbid !=null) {
             }
         });
     }
-}else{
-    if (!currentTitle.trim().isEmpty() || !currentNote.trim().isEmpty() || isImageChanged || !currentLatid.trim().isEmpty() || !currentLongid.trim().isEmpty()  ) {
-        uploadBtn.setVisibility(View.VISIBLE);
-        uploadBtn.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-
-
-                FBPost post = new FBPost(currentTitle, currentNote, getCurrentDateAndTime(), imagePath,currentLatid,currentLongid,firebaseUser.getProviderId(),0);
-                fbpost.add(post).addOnSuccessListener(suc ->
-                {
-                    Toast.makeText(CreateOrShowNoteActivity.this,"Save in Firebase",Toast.LENGTH_SHORT).show();
-                }).addOnFailureListener(er ->
-                {
-                    Toast.makeText(CreateOrShowNoteActivity.this,""+er.getMessage(),Toast.LENGTH_SHORT).show();
-                });
-            }
-        });
-    }
-}
 */
 
         if (id > 0) {

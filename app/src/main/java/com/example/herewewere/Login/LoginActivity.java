@@ -171,6 +171,7 @@ rsDialog.create().show();
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+
             }
         });
         //Go to LoginActivity
@@ -221,7 +222,7 @@ rsDialog.create().show();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser!=null)
         {
-            Toast.makeText(this, "User already Signed-in", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Welcome back "+currentUser.getEmail(), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
             startActivity(intent);
         }

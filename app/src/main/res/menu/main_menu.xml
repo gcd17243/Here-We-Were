@@ -44,8 +44,9 @@
         android:orderInCategory="6"
         android:title="@string/profile" />
     <item
+        android:id="@+id/UsersSearch"
         android:orderInCategory="7"
-        android:title="Users Search" />
+        android:title="Global post" />
     <item
         android:id="@+id/LogoutIcon"
         android:orderInCategory="8"

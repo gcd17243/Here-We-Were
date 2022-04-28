@@ -4,22 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +24,6 @@ import com.example.herewewere.Login.LoginActivity;
 import com.example.herewewere.MapsActivity;
 import com.example.herewewere.ProfileActivity;
 import com.example.herewewere.R;
-import com.example.herewewere.Users_Search;
 import com.example.herewewere.adapters.RecyclerViewAdapter;
 import com.example.herewewere.databases.MyNoteDbManager;
 import com.example.herewewere.models.MyNote;
@@ -41,6 +36,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Collections;
 import java.util.List;
@@ -61,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem listMenuItem, gridMenuItem, listOrGridViewIcon;
     private FloatingActionButton floatingActionButton,floatingActionButton2;
     GoogleSignInClient mGoogleSignInClient;
+    FirebaseAuth firebaseAuth;
 
 
     @Override
@@ -72,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
 
         setTitle("Notes");
         recyclerView = findViewById(R.id.recyclerView);
@@ -91,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
         displayAllNotes();
         floatingActionButtonHideOrShow();
     }
-
     private void displayAllNotes() {
         MyNoteDbManager myNoteDbManager = new MyNoteDbManager(this);
         myNotesList = myNoteDbManager.getAllNotes();
@@ -187,6 +182,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        FirebaseUser user = firebaseAuth.getInstance().getCurrentUser();
+
         switch (item.getItemId()) {
 
             case R.id.listOrGridViewIcon:
@@ -208,15 +205,23 @@ public class MainActivity extends AppCompatActivity {
                 fontChange();
                 break;
             case R.id.ProfileIcon:
-                startActivity(new Intent(this, ProfileActivity.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                if(user.getEmail().equals("hanngcd17243@fpt.edu.vn")){
+                    startActivity(new Intent(this, UserSearch.class));
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
+            }else{
+                    startActivity(new Intent(this, ProfileActivity.class));
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                }
+
                 break;
             case R.id.LogoutIcon:
                 signOut();
                 break;
-            case R.id.User_search:
-                startActivity(new Intent(this, Users_Search.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            case R.id.UsersSearch:
+                Intent intent = new Intent(getApplicationContext(), FBPostlist.class);
+                startActivity(intent);
+                break;
 
         }
         return true;

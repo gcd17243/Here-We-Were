@@ -52,7 +52,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="Sign-out"
+            android:text="Sign out"
+            android:textSize="24dp" />
+
+        <Button
+            android:id="@+id/deleteUserfb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Delete User"
             android:textSize="24dp" />
     </LinearLayout>
 </RelativeLayout>
