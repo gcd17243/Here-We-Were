@@ -42,4 +42,18 @@
         app:layout_constraintTop_toTopOf="parent" >
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/Personalpostbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="48dp"
+        android:focusable="true"
+        android:onClick="goToPersonalpost"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.087"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_compass" />
 </androidx.constraintlayout.widget.ConstraintLayout>

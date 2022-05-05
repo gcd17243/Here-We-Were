@@ -23,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class FBPostlist extends AppCompatActivity {
     RecyclerView recview;
     FBAdapter fbAdapter;
-    FloatingActionButton add,map;
+    FloatingActionButton add,map,personal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class FBPostlist extends AppCompatActivity {
         recview=(RecyclerView)findViewById(R.id.fbPostList);
         add = findViewById(R.id.floatingActionButton5);
         map = findViewById(R.id.floatingActionButton6);
-
+        personal = findViewById(R.id.Personalpostbtn);
         recview.setLayoutManager(new LinearLayoutManager(this));
 
         FirebaseRecyclerOptions<FBPost> options =
@@ -103,6 +103,12 @@ public class FBPostlist extends AppCompatActivity {
         fbAdapter=new FBAdapter(options);
         fbAdapter.startListening();
         recview.setAdapter(fbAdapter);
+
+    }
+    public void goToPersonalpost(View view){
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
     }
 }

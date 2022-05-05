@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView noDataTextView;
     private MenuItem listMenuItem, gridMenuItem, listOrGridViewIcon;
-    private FloatingActionButton floatingActionButton,floatingActionButton2;
+    private FloatingActionButton floatingActionButton,floatingActionButton2,Globalbtn;
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth firebaseAuth;
 
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         noDataTextView = findViewById(R.id.noDataText);
         floatingActionButton = findViewById(R.id.floatingActionButton);
         floatingActionButton2 = findViewById(R.id.floatingActionButton2);
-
+        Globalbtn = findViewById(R.id.Globalpostbtn);
 
         myPreferences = MyPreferences.getMyPreferences(this);
         myNoteDbManager = new MyNoteDbManager(this);
@@ -221,6 +221,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.UsersSearch:
                 Intent intent = new Intent(getApplicationContext(), FBPostlist.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
                 break;
 
         }
@@ -318,5 +320,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+    public void goToGlobalpost(View view){
+        Intent intent = new Intent(getApplicationContext(), FBPostlist.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
     }
 }

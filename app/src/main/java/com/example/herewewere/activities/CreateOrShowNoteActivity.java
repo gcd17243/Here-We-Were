@@ -346,6 +346,14 @@ if (fbid !=null) {
                 if (isUpdate <= 0) {
                     Toast.makeText(this, "Note not updated", Toast.LENGTH_LONG).show();
                 }
+                FBPost post = new FBPost("Update! "+currentTitle, currentNote, getCurrentDateAndTime(),fbImg,currentLatid,currentLongid,firebaseUser.getEmail(),0);
+                fbpost.add(post).addOnSuccessListener(suc ->
+                {
+                    Toast.makeText(CreateOrShowNoteActivity.this,"Save in Firebase",Toast.LENGTH_SHORT).show();
+                }).addOnFailureListener(er ->
+                {
+                    Toast.makeText(CreateOrShowNoteActivity.this,""+er.getMessage(),Toast.LENGTH_SHORT).show();
+                });
             }
         } else {
             if (!currentTitle.trim().isEmpty() || !currentNote.trim().isEmpty() || isImageChanged || !currentLatid.trim().isEmpty() || !currentLongid.trim().isEmpty()  ) {
