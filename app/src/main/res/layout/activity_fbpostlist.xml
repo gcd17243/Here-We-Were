@@ -56,4 +56,13 @@
         app:layout_constraintHorizontal_bias="0.087"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_menu_compass" />
+
+    <FrameLayout
+        android:id="@+id/wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

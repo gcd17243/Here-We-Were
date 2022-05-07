@@ -14,6 +14,9 @@ public class FBDatabasePost {
     {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         databaseReference = db.getReference(FBPost.class.getSimpleName());
+        databaseReference = db.getReference(FBComment.class.getSimpleName());
+        databaseReference = db.getReference(FBReport.class.getSimpleName());
+
 
     }
     public Task<Void> add(FBPost post)
@@ -25,6 +28,18 @@ public class FBDatabasePost {
     public Task<Void> update(String key, HashMap<String,Object>hashMap)
     {
         return databaseReference.child(key).updateChildren(hashMap);
+    }
+    public Task<Void> add(FBComment comment)
+    {
+
+        return databaseReference.push().setValue(comment);
+
+    }
+    public Task<Void> add(FBReport report)
+    {
+
+        return databaseReference.push().setValue(report);
+
     }
     public Task<Void> delete(String key)
     {

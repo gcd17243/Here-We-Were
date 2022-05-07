@@ -97,7 +97,6 @@ public class CreateOrShowNoteActivity extends AppCompatActivity implements View.
     private TextView editedDateText;
     private ImageView noteImage;
     private View map;
-    private Button uploadBtn,editBtn;
 
     private LinearLayout linearLayoutET, bottomSheetLinearLayout, deleteNoteLL, makeACopyLL, sendNoteLL, takePhotoLL, chooseImageLL,getlocation;
     private GoogleMap mMap;

@@ -14,10 +14,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.herewewere.R;
+import com.example.herewewere.activities.CommentFragment;
 import com.example.herewewere.databases.FBPost;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -50,12 +52,23 @@ public class FBAdapter extends FirebaseRecyclerAdapter<FBPost,FBAdapter.Myviewho
         holder.details.setText(fbPost.getNote());
         holder.User.setText(fbPost.getUserid());
         holder.dateShow.setText(fbPost.getDate());
-        holder.view.setText(fbPost.getView().toString());
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                FirebaseDatabase.getInstance().getReference().child("FBPost");
+            public void onClick(View view) {
+                AppCompatActivity activity=(AppCompatActivity)view.getContext();
+/*
+                Intent intent = new Intent(activity, FBComment.class);
+                intent.putExtra("id", getRef(position).getKey());
+                intent.putExtra("Title",fbPost.getTitle() );
+                intent.putExtra("Note",fbPost.getNote() );
+                intent.putExtra("Latid",fbPost.getLatid() );
+                intent.putExtra("Longid",fbPost.getLongid() );
+                intent.putExtra("Userid",fbPost.getUserid() );
+                intent.putExtra("ImagePath", fbPost.getImgpath());
+                context.startActivity(intent);
 
+ */
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.wrapper,new CommentFragment(getRef(position).getKey(),fbPost.getTitle(),fbPost.getNote(),fbPost.getLatid(),fbPost.getLongid(),fbPost.getImgpath(),fbPost.getUserid())).addToBackStack(null).commit();
             }
         });
         if(user.getEmail().equals("hanngcd17243@fpt.edu.vn")){
