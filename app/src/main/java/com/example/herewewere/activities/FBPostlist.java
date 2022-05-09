@@ -25,6 +25,7 @@ public class FBPostlist extends AppCompatActivity {
     FBAdapter fbAdapter;
     FloatingActionButton add,map,personal;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +38,7 @@ public class FBPostlist extends AppCompatActivity {
 
         FirebaseRecyclerOptions<FBPost> options =
                 new FirebaseRecyclerOptions.Builder<FBPost>()
-                        .setQuery(FirebaseDatabase.getInstance().getReference().child("FBPost"), FBPost.class)
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("FBPost").orderByChild("date"), FBPost.class)
                         .build();
         fbAdapter=new FBAdapter(options);
         recview.setAdapter(fbAdapter);

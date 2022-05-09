@@ -52,22 +52,25 @@ public class FBAdapter extends FirebaseRecyclerAdapter<FBPost,FBAdapter.Myviewho
         holder.details.setText(fbPost.getNote());
         holder.User.setText(fbPost.getUserid());
         holder.dateShow.setText(fbPost.getDate());
+        holder.view.setText(fbPost.getView().toString());
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Map<String,Object> map=new HashMap<>();
+                map.put("view",fbPost.getView()+1);
+                  FirebaseDatabase.getInstance().getReference().child("FBPost")
+                        .child(getRef(position).getKey()).updateChildren(map)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                            }
+                        });
                 AppCompatActivity activity=(AppCompatActivity)view.getContext();
-/*
-                Intent intent = new Intent(activity, FBComment.class);
-                intent.putExtra("id", getRef(position).getKey());
-                intent.putExtra("Title",fbPost.getTitle() );
-                intent.putExtra("Note",fbPost.getNote() );
-                intent.putExtra("Latid",fbPost.getLatid() );
-                intent.putExtra("Longid",fbPost.getLongid() );
-                intent.putExtra("Userid",fbPost.getUserid() );
-                intent.putExtra("ImagePath", fbPost.getImgpath());
-                context.startActivity(intent);
-
- */
                 activity.getSupportFragmentManager().beginTransaction().replace(R.id.wrapper,new CommentFragment(getRef(position).getKey(),fbPost.getTitle(),fbPost.getNote(),fbPost.getLatid(),fbPost.getLongid(),fbPost.getImgpath(),fbPost.getUserid())).addToBackStack(null).commit();
             }
         });

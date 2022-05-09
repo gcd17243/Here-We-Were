@@ -48,8 +48,12 @@
         android:orderInCategory="7"
         android:title="Global post" />
     <item
-        android:id="@+id/LogoutIcon"
+        android:id="@+id/Report"
         android:orderInCategory="8"
+        android:title="Report" />
+    <item
+        android:id="@+id/LogoutIcon"
+        android:orderInCategory="9"
         android:title="@string/logout" />
 
 

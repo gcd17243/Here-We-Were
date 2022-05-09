@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton floatingActionButton,floatingActionButton2,Globalbtn;
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth firebaseAuth;
+    Intent intent;
 
 
     @Override
@@ -219,10 +220,13 @@ public class MainActivity extends AppCompatActivity {
                 signOut();
                 break;
             case R.id.UsersSearch:
-                Intent intent = new Intent(getApplicationContext(), FBPostlist.class);
+                intent = new Intent(getApplicationContext(), FBPostlist.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-
+            case R.id.Report:
+                intent = new Intent(getApplicationContext(), Report.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 break;
 
         }
